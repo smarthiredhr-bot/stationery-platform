@@ -9,10 +9,10 @@ import { TextStyle } from '@tiptap/extension-text-style';
 import FontFamily from '@tiptap/extension-font-family';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
-import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
 
 import { 
   Bold, Italic, Underline as UnderlineIcon, Strikethrough,
@@ -20,8 +20,7 @@ import {
   List, ListOrdered, Undo, Redo, Printer, Download,
   Upload, FileText, CheckCircle2, ZoomIn, ZoomOut,
   Highlighter, Table as TableIcon, Heading1, Heading2,
-  ChevronDown, Palette, Type, LayoutTemplate, Sparkles,
-  HelpCircle, Share2, Search, Sliders, Scissors, Copy, Clipboard
+  ChevronDown, Palette, Type, Search
 } from 'lucide-react';
 
 const FONT_OPTIONS = [
@@ -98,8 +97,6 @@ export default function MicrosoftWordEditor() {
 
   const handleSizeChange = (size: string) => {
     setSelectedSize(size);
-    // Apply size via inline styling on the selection
-    const pxSize = parseInt(size) * 1.33;
     editor.chain().focus().setMark('textStyle', { style: `font-size: ${size}` }).run();
   };
 
@@ -179,7 +176,6 @@ export default function MicrosoftWordEditor() {
       <div className="bg-[#2b2b2b] border-b border-neutral-700 px-4 py-2.5 flex items-center gap-4 text-xs overflow-x-auto min-h-[58px]">
         {activeTab === 'Home' && (
           <>
-            {/* Clipboard Group */}
             <div className="flex items-center space-x-1 border-r border-neutral-700 pr-3">
               <label className="p-1.5 hover:bg-neutral-700 rounded cursor-pointer text-neutral-300" title="Open File">
                 <Upload size={15} />
