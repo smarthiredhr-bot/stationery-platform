@@ -15,6 +15,7 @@ import { Table } from '@tiptap/extension-table';
 import { TableRow } from '@tiptap/extension-table-row';
 import { TableCell } from '@tiptap/extension-table-cell';
 import { TableHeader } from '@tiptap/extension-table-header';
+import { FontSize } from '@/lib/fontSize';
 
 import { 
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Subscript as SubIcon, Superscript as SuperIcon,
@@ -22,37 +23,33 @@ import {
   List, ListOrdered, Undo, Redo, Printer, Download,
   Upload, FileText, CheckCircle2, ZoomIn, ZoomOut,
   Highlighter, Table as TableIcon, Heading1, Heading2,
-  ChevronDown, Palette, Scissors, Copy, Clipboard,
-  Indent, Outdent, FilePlus, Columns, Maximize2, SplitSquareVertical,
-  Minus, Sparkles, Image, Check, Search, Save
+  ChevronDown, Palette, Save, Search, ArrowLeft
 } from 'lucide-react';
 
-// Comprehensive typography list matching Word
 const FONT_FAMILIES = [
-  { name: 'Calibri', font: 'Calibri, sans-serif', sample: 'AaBb' },
-  { name: 'Times New Roman', font: '"Times New Roman", Times, serif', sample: 'AaBb' },
-  { name: 'Arial', font: 'Arial, Helvetica, sans-serif', sample: 'AaBb' },
-  { name: 'Arial Black', font: '"Arial Black", sans-serif', sample: 'AaBb' },
-  { name: 'Bahnschrift', font: 'Bahnschrift, sans-serif', sample: 'AaBb' },
-  { name: 'Cambria', font: 'Cambria, Georgia, serif', sample: 'AaBb' },
-  { name: 'Century Gothic', font: '"Century Gothic", sans-serif', sample: 'AaBb' },
-  { name: 'Courier New', font: '"Courier New", Courier, monospace', sample: 'AaBb' },
-  { name: 'Franklin Gothic', font: '"Franklin Gothic Medium", sans-serif', sample: 'AaBb' },
-  { name: 'Georgia', font: 'Georgia, serif', sample: 'AaBb' },
-  { name: 'Impact', font: 'Impact, sans-serif', sample: 'AaBb' },
-  { name: 'Segoe UI', font: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif', sample: 'AaBb' },
-  { name: 'Trebuchet MS', font: '"Trebuchet MS", sans-serif', sample: 'AaBb' },
-  { name: 'Verdana', font: 'Verdana, Geneva, sans-serif', sample: 'AaBb' },
+  { name: 'Calibri', font: 'Calibri, sans-serif' },
+  { name: 'Times New Roman', font: '"Times New Roman", Times, serif' },
+  { name: 'Arial', font: 'Arial, Helvetica, sans-serif' },
+  { name: 'Arial Black', font: '"Arial Black", sans-serif' },
+  { name: 'Bahnschrift', font: 'Bahnschrift, sans-serif' },
+  { name: 'Cambria', font: 'Cambria, Georgia, serif' },
+  { name: 'Century Gothic', font: '"Century Gothic", sans-serif' },
+  { name: 'Courier New', font: '"Courier New", Courier, monospace' },
+  { name: 'Franklin Gothic', font: '"Franklin Gothic Medium", sans-serif' },
+  { name: 'Georgia', font: 'Georgia, serif' },
+  { name: 'Impact', font: 'Impact, sans-serif' },
+  { name: 'Segoe UI', font: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif' },
+  { name: 'Trebuchet MS', font: '"Trebuchet MS", sans-serif' },
+  { name: 'Verdana', font: 'Verdana, Geneva, sans-serif' },
 ];
 
 const FONT_SIZES = ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '26', '28', '36', '48', '72'];
 
-// Page size presets
 interface PageFormat {
   id: string;
   name: string;
-  width: number;  // px in 96 DPI
-  height: number; // px in 96 DPI
+  width: number;
+  height: number;
   unitDesc: string;
 }
 
@@ -62,7 +59,6 @@ const PAGE_FORMATS: PageFormat[] = [
   { id: 'legal', name: 'Legal', width: 816, height: 1344, unitDesc: '8.5 x 14.0 in' },
   { id: 'a3', name: 'A3', width: 1123, height: 1587, unitDesc: '297 x 420 mm' },
   { id: 'a5', name: 'A5', width: 559, height: 794, unitDesc: '148 x 210 mm' },
-  { id: 'custom', name: 'Custom Invoice', width: 720, height: 960, unitDesc: '7.5 x 10 in' },
 ];
 
 const PALETTE_COLORS = [
@@ -75,7 +71,7 @@ export default function ProfessionalWordEditor() {
   const [activeTab, setActiveTab] = useState<'Home' | 'Insert' | 'Layout'>('Home');
   const [selectedFont, setSelectedFont] = useState('Calibri, sans-serif');
   const [selectedSize, setSelectedSize] = useState('11');
-  const [selectedPageSize, setSelectedPageSize] = useState<PageFormat>(PAGE_FORMATS[0]); // Default A4
+  const [selectedPageSize, setSelectedPageSize] = useState<PageFormat>(PAGE_FORMATS[0]);
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
   const [margins, setMargins] = useState<'normal' | 'narrow' | 'wide'>('normal');
   const [zoomLevel, setZoomLevel] = useState(100);
@@ -90,6 +86,7 @@ export default function ProfessionalWordEditor() {
       Subscript,
       Superscript,
       TextStyle,
+      FontSize,
       FontFamily,
       Color,
       Highlight.configure({ multicolor: true }),
@@ -107,8 +104,8 @@ export default function ProfessionalWordEditor() {
       <p>Compose resumes, contracts, formal invoices, and reports with full Microsoft Word capabilities. Switch page layouts between A4, Letter, and Legal with millimeter accuracy.</p>
       <h2>2. Document Specifications</h2>
       <ol>
-        <li><strong>Standard Presets:</strong> Precise A4 printer margins ($210 \\times 297\\text{ mm}$) and Letter dimensions.</li>
-        <li><strong>Rich Ribbon Toolbar:</strong> Font styles, subscripts ($H_2O$), superscripts ($E=mc^2$), and dynamic alignment.</li>
+        <li><strong>Standard Presets:</strong> Precise A4 printer margins (210 x 297 mm) and Letter dimensions.</li>
+        <li><strong>Rich Ribbon Toolbar:</strong> Font styles, subscripts (H<sub>2</sub>O), superscripts (E=mc<sup>2</sup>), and dynamic alignment.</li>
         <li><strong>Direct Print Integration:</strong> Single-click handoff directly into the Stationery Express print queue.</li>
       </ol>
     `,
@@ -121,22 +118,19 @@ export default function ProfessionalWordEditor() {
 
   if (!editor) return null;
 
-  // Live document statistics
   const textContent = editor.getText().trim();
   const wordCount = textContent ? textContent.split(/\s+/).length : 0;
   const charCount = editor.getText().length;
 
-  // Dynamic canvas sizing
   const canvasWidth = orientation === 'portrait' ? selectedPageSize.width : selectedPageSize.height;
   const canvasHeight = orientation === 'portrait' ? selectedPageSize.height : selectedPageSize.width;
 
   const marginPadding = {
-    normal: 'p-16',   // 1 inch (approx 64px)
-    narrow: 'p-8',    // 0.5 inch (approx 32px)
-    wide: 'p-24',     // 1.5 inch (approx 96px)
+    normal: 'p-16',
+    narrow: 'p-8',
+    wide: 'p-24',
   }[margins];
 
-  // Actions
   const handleFontSelect = (font: string) => {
     setSelectedFont(font);
     editor.chain().focus().setFontFamily(font).run();
@@ -144,7 +138,8 @@ export default function ProfessionalWordEditor() {
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
-    editor.chain().focus().setMark('textStyle', { style: `font-size: ${size}pt` }).run();
+    // Call the dedicated setFontSize command with standard pt units
+    (editor.chain().focus() as any).setFontSize(`${size}pt`).run();
   };
 
   const handleColorSelect = (hex: string) => {
@@ -155,6 +150,16 @@ export default function ProfessionalWordEditor() {
   const handleHighlightSelect = (hex: string) => {
     editor.chain().focus().setHighlight({ color: hex }).run();
     setShowHighlightPicker(false);
+  };
+
+  const handleExportText = () => {
+    const blob = new Blob([editor.getText()], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Document_${selectedPageSize.name}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,21 +173,14 @@ export default function ProfessionalWordEditor() {
     reader.readAsText(file);
   };
 
-  const handleExportText = () => {
-    const blob = new Blob([editor.getText()], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Document_${selectedPageSize.name}.txt`;
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
   return (
-    <div className="min-h-screen bg-[#242424] flex flex-col select-none text-slate-200">
-      {/* Title Bar */}
+    <div className="fixed inset-0 bg-[#242424] flex flex-col select-none text-slate-200 z-50">
+      {/* Top Microsoft Word Application Bar */}
       <div className="bg-[#1e1e1e] border-b border-neutral-800 px-4 py-1.5 flex items-center justify-between text-xs text-neutral-300">
         <div className="flex items-center space-x-3">
+          <a href="/print" className="p-1 hover:bg-neutral-800 rounded text-neutral-400 hover:text-white" title="Back to Printing Station">
+            <ArrowLeft size={16} />
+          </a>
           <span className="font-semibold text-blue-400 flex items-center gap-1.5">
             <FileText size={16} /> Document1 - Word
           </span>
@@ -211,6 +209,12 @@ export default function ProfessionalWordEditor() {
         </div>
 
         <div className="flex items-center space-x-2">
+          <button
+            onClick={() => window.print()}
+            className="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-medium px-3 py-1.5 rounded-md text-xs transition inline-flex items-center gap-1"
+          >
+            <Printer size={13} /> Print
+          </button>
           <a
             href="/print"
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-1.5 rounded-md text-xs shadow-xs transition"
@@ -262,9 +266,8 @@ export default function ProfessionalWordEditor() {
               </button>
             </div>
 
-            {/* Font Group */}
+            {/* Font Picker */}
             <div className="flex items-center space-x-2 border-r border-neutral-800 pr-3">
-              {/* Font Family Picker */}
               <select
                 value={selectedFont}
                 onChange={(e) => handleFontSelect(e.target.value)}
@@ -467,7 +470,6 @@ export default function ProfessionalWordEditor() {
 
         {activeTab === 'Layout' && (
           <div className="flex items-center space-x-6">
-            {/* Page Size Selector */}
             <div className="flex items-center space-x-2">
               <span className="text-neutral-400 text-xs">Size:</span>
               <select
@@ -486,7 +488,6 @@ export default function ProfessionalWordEditor() {
               </select>
             </div>
 
-            {/* Page Orientation */}
             <div className="flex items-center space-x-2">
               <span className="text-neutral-400 text-xs">Orientation:</span>
               <button
@@ -503,7 +504,6 @@ export default function ProfessionalWordEditor() {
               </button>
             </div>
 
-            {/* Margins */}
             <div className="flex items-center space-x-2">
               <span className="text-neutral-400 text-xs">Margins:</span>
               <select
