@@ -5,7 +5,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
-import TextStyle from '@tiptap/extension-text-style';
+import { TextStyle } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import { 
@@ -13,7 +13,7 @@ import {
   AlignLeft, AlignCenter, AlignRight, AlignJustify,
   List, ListOrdered, Undo, Redo, Printer, Download,
   Upload, FileText, CheckCircle2, ZoomIn, ZoomOut,
-  Highlighter, Palette, Scissors, Copy, Clipboard
+  Highlighter
 } from 'lucide-react';
 
 export default function AdvancedWordProcessor() {
