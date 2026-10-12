@@ -31,8 +31,8 @@ export default function RootLayout({
                 <Link href="/print" className="hover:text-blue-600 transition-colors">
                   Printing & Pricing
                 </Link>
-                <Link href="/editor" className="hover:text-blue-600 transition-colors">
-                  Word Processor
+                <Link href="/scan" className="hover:text-blue-600 transition-colors">
+                  Doc Scanner
                 </Link>
               </nav>
             </div>
@@ -51,3 +51,4 @@ export default function RootLayout({
     </html>
   );
 }
+

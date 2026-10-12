@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 
 const PRODUCTS = [
   { id: 1, name: "Premium Hardcover Notebook", price: "UGX 35,000", tag: "Best Seller" },
@@ -41,3 +41,4 @@ export default function Home() {
     </div>
   );
 }
+
