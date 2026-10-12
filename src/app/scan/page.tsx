@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { createWorker } from 'tesseract.js';
 import { 
   Camera, Upload, FileText, CheckCircle2, 
-  Copy, Printer, RefreshCw, AlertCircle, ArrowRight 
+  Copy, Printer, RefreshCw, ArrowRight 
 } from 'lucide-react';
 
 export default function DocumentScannerPage() {
@@ -30,25 +29,27 @@ export default function DocumentScannerPage() {
 
   const processOCR = async (file: File) => {
     setIsProcessing(true);
-    setProgress(0);
-    setStatusText('Initializing OCR Scanner Engine...');
+    setProgress(10);
+    setStatusText('Loading OCR engine...');
     setExtractedText('');
 
     try {
+      // Dynamic import to prevent SSR / Webpack build crashes
+      const { createWorker } = await import('tesseract.js');
       const worker = await createWorker('eng');
       
-      setStatusText('Analyzing handwriting and document layout...');
-      setProgress(40);
+      setStatusText('Scanning handwriting and document text...');
+      setProgress(50);
 
       const ret = await worker.recognize(file);
       setProgress(100);
-      setStatusText('Extraction Complete!');
+      setStatusText('Complete!');
       setExtractedText(ret.data.text.trim());
 
       await worker.terminate();
     } catch (err) {
       console.error(err);
-      setStatusText('Failed to read image. Please ensure text is clear.');
+      setStatusText('Failed to scan image. Please try a clearer picture.');
     } finally {
       setIsProcessing(false);
     }
@@ -63,11 +64,10 @@ export default function DocumentScannerPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-16">
-      {/* Top Header */}
       <header className="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-20 shadow-xs">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <span className="font-extrabold text-lg text-blue-600 tracking-tight">Stationery Express</span>
+            <a href="/" className="font-extrabold text-lg text-blue-600 tracking-tight">Stationery Express</a>
             <span className="text-slate-300">|</span>
             <h1 className="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
               <Camera size={16} className="text-blue-600" /> Handwriting & Document OCR Scanner
@@ -90,17 +90,15 @@ export default function DocumentScannerPage() {
         </div>
       </header>
 
-      {/* Main Container */}
       <main className="max-w-6xl mx-auto px-4 mt-8">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-slate-900">Auto Handwriting & Physical Doc Scanner</h2>
+          <h2 className="text-2xl font-bold text-slate-900">Auto Handwriting & Physical Document Scanner</h2>
           <p className="text-sm text-slate-600 mt-1">
             Upload or capture photos of handwritten notes, paper applications, forms, or printed receipts. We automatically convert handwriting into clean digital text ready for printing or copying.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column: Image Upload & Preview */}
           <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
             <div>
               <h3 className="font-semibold text-sm text-slate-800 mb-3 flex items-center gap-2">
@@ -143,7 +141,6 @@ export default function DocumentScannerPage() {
               </div>
             </div>
 
-            {/* OCR Processing Bar */}
             {isProcessing && (
               <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <div className="flex items-center justify-between text-xs font-semibold text-blue-800 mb-2">
@@ -162,7 +159,6 @@ export default function DocumentScannerPage() {
             )}
           </div>
 
-          {/* Right Column: Extracted Digital Text */}
           <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-semibold text-sm text-slate-800 flex items-center gap-2">
