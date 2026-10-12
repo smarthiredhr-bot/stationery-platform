@@ -31,8 +31,8 @@ export default function RootLayout({
                 <Link href="/print" className="hover:text-blue-600 transition-colors">
                   Printing & Pricing
                 </Link>
-                <Link href="/scan" className="hover:text-blue-600 transition-colors">
-                  Doc Scanner
+                <Link href="/design" className="hover:text-blue-600 transition-colors">
+                  AI Designer & Covers
                 </Link>
               </nav>
             </div>

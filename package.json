@@ -10,8 +10,10 @@
         "postinstall": "prisma skills sync || exit 0"
     },
     "dependencies": {
+        "@imgly/background-removal": "^1.7.0",
         "@prisma/client": "^6.19.3",
         "clsx": "^2.1.1",
+        "html2canvas": "^1.4.1",
         "lucide-react": "^1.55.0",
         "mammoth": "^1.13.0",
         "next": "16.4.0",
